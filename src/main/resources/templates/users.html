@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="head :: head">
+</head>
+<title th:text="#{employee.page}"></title>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <form th:action="@{/home}" method="get">
+            <input type="submit" th:value="#{home.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/home/account}" method="get">
+            <input type="submit" th:value="#{account.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/transfer}" method="get">
+            <input type="submit" th:value="#{transfer.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/history}" method="get">
+            <input type="submit" th:value="#{history.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form sec:authorize="hasAuthority('EMPLOYEE')" th:action="@{/users}" method="get">
+            <input type="submit" th:value="#{employee.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/console}" method="get">
+            <input type="submit" th:value="#{console.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" th:value="#{logout}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+    </nav>
+    <div class="container">
+
+        <div class="card-header">
+            <form th:action="@{/users/userId}" method="get" class="input-group" style="margin-top:50px;">
+                <input name="userId" th:placeholder="#{search.submit}" min="0" type="number" class="form-control search">
+                <div class="input-group-prepend">
+                    <button class="input-group-text search_btn"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+        </div>
+
+        <p th:text="${'Users registered : ' + numberOfUsers}" class="card-header"></p>
+        <p th:text="${'Bank funds : ' + bankFunds + ' PLN'}" class="card-header"></p>
+        <p th:if="${message != null}" th:text="${message}" class="alert alert-success"></p>
+        <p th:if="${fatalError != null}" th:text="${fatalError}" class="alert alert-danger"></p>
+        <p th:if="${fatalErrors != null}" th:each="fatalError : ${fatalErrors}" th:text="${fatalError}" class="alert alert-danger"></p>
+
+        <div th:if="${user != null}" class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <br>
+                <form autocomplete="off" action="#" th:action="@{/console/update}" th:object="${user}" method="post" class="form-horizontal">
+                    <h2 th:text="#{form.update.user}"></h2>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:text="#{user.id}"></label>
+                            <input disabled type="text" th:value="${user.id}" class="form-control"/>
+                            <input type="hidden" th:field="*{id}" th:value="${user.id}"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:text="#{user.accountNumber}"></label>
+                            <label th:if="${#fields.hasErrors('accountNumber')}" th:errors="*{accountNumber}" class="validation-message" style="font-size:20;color:#FF1C19;"></label>
+                            <input th:disabled="${disabled}" type="text" th:field="*{accountNumber}" th:placeholder="#{user.accountNumber}" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div th:insert="userForm">
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:text="#{user.enabled}"></label>
+                            <label th:if="${#fields.hasErrors('enabled')}" th:errors="*{enabled}" class="validation-message" style="font-size:20;color:#FF1C19;"></label>
+                            <input disabled type="text" th:field="*{enabled}" th:placeholder="${user.enabled}" class="form-control"/>
+                            <select th:disabled="${disabled}" th:field="*{enabled}" class="form-control">
+                                <option th:text="#{employee.set.enabled}" th:value="true"></option>
+                                <option th:text="#{employee.set.disabled}" th:value="false"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:text="#{user.createdAccountTime}"></label>
+                            <input disabled type="text" th:placeholder="${user.createdAccountTime}" class="form-control"/>
+                            <input type="hidden" th:field="*{createdAccountTime}" th:value="${user.createdAccountTime}" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div sec:authorize="hasAuthority('ADMIN')" class="form-group">
+                        <div class="col-sm-9">
+                            <label th:text="#{user.ip}"></label>
+                            <input disabled type="text" th:placeholder="${user.ip}" class="form-control"/>
+                            <input type="hidden" th:field="*{ip}" th:value="${user.ip}" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:text="#{user.roles}"></label>
+                            <label th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="validation-message" style="font-size:20;color:#FF1C19;"></label>
+                            <input disabled type="text" th:placeholder="${user.roles}" class="form-control"/>
+                            <select th:disabled="${disabled}" th:field="*{roles}" class="form-control">
+                                <option th:text="#{user.role}" value="0"></option>
+                                <option th:text="#{employee.role}" value="1"></option>
+                                <option th:text="#{admin.role}" value="2"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <button th:disabled="${disabled}" type="submit" class="btn btn-primary btn-block" th:text="#{form.button.update}"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="rightColumn" style="margin-top:30px;">
+                <form th:if="${admin != null}" th:action="${'/console/delete'}" method="post">
+                    <input name="userId" th:value="${user.id}" type="hidden">
+                    <button th:text="#{admin.delete.user}" class="btn btn-primary"></button>
+                </form>
+                <br>
+                <form th:action="@{/users/userId}" method="post">
+                    <input name="userId" th:value="${user.id}" type="hidden">
+                    <label th:text="#{user.enabled}"></label>
+                    <input disabled type="text" th:placeholder="${user.enabled}" class="form-control"/>
+                    <select name="enable" class="form-control">
+                        <option th:text="#{employee.set.enabled}" th:value="true"></option>
+                        <option th:text="#{employee.set.disabled}" th:value="false"></option>
+                    </select>
+                    <br>
+                    <button th:text="#{admin.set}" class="btn btn-primary"></button>
+                </form>
+                <br>
+                <div th:each="metadata : ${deviceMetadata}">
+                    <br><br>
+                    <label th:text="#{user.id}"></label>
+                    <input disabled type="text" th:placeholder="${metadata.id}" class="form-control"/>
+                    <label th:text="#{email.unknown.login.notification.deviceDetails}"></label>
+                    <input disabled type="text" th:placeholder="${metadata.deviceDetails}" class="form-control"/>
+                    <label th:text="#{email.unknown.login.notification.location}"></label>
+                    <input disabled type="text" th:placeholder="${metadata.location}" class="form-control"/>
+                    <label th:text="#{last.logged}"></label>
+                    <input disabled type="text" th:placeholder="${metadata.lastLogged}" class="form-control"/>
+                </div>
+            </div>
+
+            <table class="table table-dark table-hover" style="font-size:15px;max-width:800px;">
+                <thead>
+                    <tr>
+                        <th th:text="#{history.operation.date}"></th>
+                        <th th:text="#{history.recipient}"></th>
+                        <th th:text="#{history.kind.data.transaction}"></th>
+                        <th th:text="#{history.sender}" style="min-width:150px;"></th>
+                        <th th:text="#{history.recipient}" style="min-width:150px;"></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody th:each="transfer : ${transfers}" class="active">
+                    <tr>
+                        <td th:text="${transfer.date}"></td>
+                        <td th:text="${transfer.recipient}" style="min-width:240px;"></td>
+                        <td th:text="#{history.transfer}"></td>
+                        <td>
+                            <p th:text="${'- ' + transfer.amount + ' PLN'}" style="color:red;"></p>
+                            <p th:text="${transfer.senderBalance + ' PLN'}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${'+ ' + transfer.amount + ' PLN'}" style="color:green;"></p>
+                            <p th:text="${transfer.recipientBalance + ' PLN'}"></p>
+                        </td>
+                        <td>
+                            <button th:text="#{history.details}" type="button" class="btn btn-primary" data-toggle="modal" th:data-target="${'#myModal' + transfer.id}"></button>
+
+                            <div class="modal fade" th:id="${'myModal' + transfer.id}" role="dialog" style="opacity:1;">
+                                <div class="modal-dialog modal-lg">
+                                    <form th:action="@{/history/print}" th:object="${transfer}" method="post" class="modal-content" style="position:fixed;color:black;">
+                                        <div class="modal-header">
+                                            <h4 th:text="#{history.details}" class="modal-title"></h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <strong th:text="#{history.id}"></strong>
+                                            <p th:text="${transfer.id}"></p>
+                                            <input type="hidden" name="id" th:value="${transfer.id}">
+
+                                            <strong th:text="#{transfer.recipientName}"></strong>
+                                            <p th:text="${transfer.recipientName}"></p>
+                                            <input type="hidden" name="recipientName" th:value="${transfer.recipientName}">
+
+                                            <strong th:text="#{history.sender.recipient}"></strong>
+                                            <p th:text="${transfer.senderRecipient}"></p>
+                                            <input type="hidden" name="senderRecipient" th:value="${transfer.senderRecipient}">
+
+                                            <strong th:text="#{transfer.amount}"></strong>
+                                            <p th:text="${transfer.amount}"></p>
+                                            <input type="hidden" name="amount" th:value="${transfer.amount}">
+
+                                            <strong th:text="#{history.balance}"></strong>
+                                            <p th:text="${transfer.senderBalance}"></p>
+                                            <input type="hidden" name="senderBalance" th:value="${transfer.senderBalance}">
+
+                                            <strong th:text="#{history.balance}"></strong>
+                                            <p th:text="${transfer.recipientBalance}"></p>
+                                            <input type="hidden" name="recipientBalance" th:value="${transfer.recipientBalance}">
+
+                                            <strong th:text="#{transfer.date}"></strong>
+                                            <p th:text="${transfer.date}"></p>
+                                            <input type="hidden" name="date" th:value="${transfer.date}">
+
+                                            <strong th:text="#{transfer.subject}"></strong>
+                                            <p th:text="${transfer.subject}"></p>
+                                            <input type="hidden" name="subject" th:value="${transfer.subject}">
+
+                                            <strong th:if="${transfer.executed==true}" th:text="#{history.executed}"></strong>
+                                            <p th:if="${transfer.executed!=true}" th:text="#{history.incomplete}"></p>
+                                            <input type="hidden" name="executed" th:value="${transfer.executed}">
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button th:text="#{history.mail}" type="button" class="btn btn-primary" data-toggle="modal" th:data-target="${'#myModalMail' + transfer.id}"></button>
+                                            <button th:text="#{history.print}" class="btn btn-primary"></button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" th:id="${'myModalMail' + transfer.id}" role="dialog" style="opacity:1;">
+                                <div class="modal-dialog modal-lg">
+                                    <form th:action="${'/history/' + transfer + '/' + user.id}" th:object="${emailBody}" method="post" class="modal-content" style="position:fixed;color:black;">
+                                        <div class="modal-header">
+                                            <h4 th:text="#{history.mail}" class="modal-title"></h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-9">
+                                                        <label th:text="#{history.email}"></label>
+                                                        <input th:field="*{recipient}" type="email" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-9">
+                                                        <label th:text="#{history.subject}"></label>
+                                                        <input th:field="*{subject}" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-9">
+                                                        <label th:text="#{history.contents}"></label>
+                                                        <input th:field="*{body}" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button th:text="#{history.send}" class="btn btn-primary"></button>
+                                            <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p th:if="${historyMessage != null}" th:text="${historyMessage}" class="alert alert-success"></p>
+
+        <!--   MANY USERS   -->
+
+        <table th:if="${users != null}" class="table table-dark table-hover" id="searchUl">
+            <thead>
+                <tr>
+                    <th th:text="#{user.id}"></th>
+                    <th th:text="#{user.accountNumber}"></th>
+                    <th th:text="#{form.email}"></th>
+                    <th th:text="#{form.personalIdNumber}"></th>
+                    <th th:text="#{user.enabled}"></th>
+                    <th th:text="#{user.roles}"></th>
+
+                </tr>
+            </thead>
+
+            <tbody th:each="singleUser : ${users}" class="active">
+                <tr>
+                    <td>
+                        <form th:action="@{/users/userId}" method="get">
+                            <input th:value="${singleUser.id}" name="userId" type="hidden">
+                            <button th:text="${singleUser.id}" class="btn btn-primary"></button>
+                        </form>
+                    </td>
+                    <td th:text="${singleUser.accountNumber}"></td>
+                    <td th:text="${singleUser.email}"></td>
+                    <td th:text="${singleUser.personalIdNumber}"></td>
+                    <td th:text="${singleUser.enabled}"></td>
+                    <td th:text="${singleUser.roles}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

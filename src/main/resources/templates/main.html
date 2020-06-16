@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="head :: head">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <form th:action="@{/home}" method="get">
+            <input type="submit" th:value="#{home.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/home/account}" method="get">
+            <input type="submit" th:value="#{account.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/transfer}" method="get">
+            <input type="submit" th:value="#{transfer.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/history}" method="get">
+            <input type="submit" th:value="#{history.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form sec:authorize="hasAuthority('EMPLOYEE')" th:action="@{/users}" method="get">
+            <input type="submit" th:value="#{employee.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/console}" method="get">
+            <input type="submit" th:value="#{console.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" th:value="#{logout}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="card-header">
+                <h1 th:text="${pageTitle}"></h1>
+                <p th:text="${date}"></p>
+                <p th:if="${message != null}" th:text="${message}" class="alert alert-success"></p>
+                <p th:if="${fatalError != null}" th:text="${fatalError}" class="alert alert-danger"></p>
+                <p th:if="${fatalErrors != null}" th:each="fatalError : ${fatalErrors}" th:text="${fatalError}" class="alert alert-danger"></p>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="${template}" class="container">
+
+    </div>
+</body>
+</html>

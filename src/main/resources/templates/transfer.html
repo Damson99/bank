@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="transfer" class="row">
+        <div>
+            <div>
+                <p th:text="#{transfer.account.number} + ' ' + ${user.accountNumber}" class="card-header"></p>
+                <p th:text="#{available.funds} + ' ' + ${user.funds + ' PLN'}" class="card-header"></p>
+
+                <form th:if="${transferForm}" th:action="@{/transfer/0}" th:object="${transfer}" method="post">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th th:text="#{transfer.recipient}"></th>
+                                <th>
+                                    <label th:if="${#fields.hasErrors('recipient')}" th:errors="*{recipient}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{recipient}" type="text" style="min-width:300px;">
+                                </th>
+                            </tr>
+                            <tr>
+                                <th th:text="#{transfer.recipientName}"></th>
+                                <th>
+                                    <label th:if="${#fields.hasErrors('recipientName')}" th:errors="*{recipientName}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{recipientName}" type="text" style="min-width:300px;">
+                                </th>
+                            </tr>
+                            <tr></tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td th:text="#{transfer.subject}"></td>
+                                <td>
+                                    <label th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{subject}" type="text" style="min-width:300px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td th:text="#{transfer.amount}"></td>
+                                <td>
+                                    <label th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{amount}" type="text" placeholder="0.00">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button th:text="#{transfer.execute}" class="btn btn-primary"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <br>
+            <div>
+                <hr>
+                <form th:action="@{/transfer/defineNew}" method="get">
+                    <button th:text="#{transfer.define.new}" class="btn btn-primary"></button>
+                </form>
+                <hr>
+                <br>
+                <form th:if="${definedNewTransferForm}" th:action="@{/transfer/defineNew}" th:object="${definedTransfer}" method="post">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th th:text="#{transfer.recipient}"></th>
+                                <th>
+                                    <label th:if="${#fields.hasErrors('recipient')}" th:errors="*{recipient}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{recipient}" type="text" style="min-width:300px;">
+                                </th>
+                            </tr>
+                            <tr>
+                                <th th:text="#{transfer.recipientName}"></th>
+                                <th>
+                                    <label th:if="${#fields.hasErrors('recipientName')}" th:errors="*{recipientName}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{recipientName}" type="text" style="min-width:300px;">
+                                </th>
+                            </tr>
+                            <tr></tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td th:text="#{transfer.subject}"></td>
+                                <td>
+                                    <label th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{subject}" type="text" style="min-width:300px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button th:text="#{transfer.execute}" class="btn btn-primary"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+                <table th:if="${definedTransferForm}" class="table">
+                    <thead>
+                        <tr>
+                            <th th:text="#{transfer.recipient}" scope="col"></th>
+                            <th th:text="#{transfer.recipientName}" scope="col"></th>
+                            <th th:text="#{transfer.subject}" scope="col"></th>
+                            <th th:text="#{transfer.amount}" scope="col"></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody th:each="singleDefinedTransfer : ${definedTransfers}" th:if="${transferNumberForm == 0 || transferNumberForm==singleDefinedTransfer.id}">
+                        <tr>
+                            <form th:action="${'/transfer/' + singleDefinedTransfer.id}" th:object="${transfer}" method="post">
+                                <td>
+                                    <label th:if="${#fields.hasErrors('recipient')}" th:errors="*{recipient}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input name="recipient" th:value="${singleDefinedTransfer.recipient}" type="text">
+                                </td>
+                                <td>
+                                    <label th:if="${#fields.hasErrors('recipientName')}" th:errors="*{recipientName}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input name="recipientName" th:value="${singleDefinedTransfer.recipientName}" type="text">
+                                </td>
+                                <td>
+                                    <label th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input name="subject" th:value="${singleDefinedTransfer.subject}" type="text">
+                                </td>
+                                <td>
+                                    <label th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="validation-message" style="position:absolute;color:#FF1C19;margin-top:28px;"></label>
+                                    <input th:field="*{amount}" type="text" placeholder="0.00">
+                                </td>
+                                <td>
+                                    <button th:text="#{transfer.execute}" class="btn btn-primary"></button>
+                                </td>
+                            </form>
+                            <td>
+                                <form action="transfer/defineNew/delete" method="post">
+                                    <input name="definedTransferId" type="hidden" th:value="${singleDefinedTransfer.id}">
+                                    <button th:text="#{transfer.delete}" class="btn btn-primary"></button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

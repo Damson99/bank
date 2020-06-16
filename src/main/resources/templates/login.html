@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="head :: head">
+</head>
+
+<body>
+
+    <form th:action="@{/registration}" method="get">
+        <button class="btn btn-md btn-info btn-block" type="Submit" th:text="#{button.registration.page}"></button>
+    </form>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+
+                <form th:action="@{/login}" method="post">
+
+                    <h3 class="form-singin-heading" th:text="#{form.welcome}"></h3>
+
+                    <p th:if="${message != null}" th:text="${message}" class="alert alert-success"></p>
+                    <p th:if="${fatalError != null}" th:text="${fatalError}" class="alert alert-danger"></p>
+
+                    <div th:if="${param.error != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+
+                    <br>
+                    <input type="text" name="personalIdNumber" th:placeholder="#{form.personalIdNumber}" class="form-control">
+                    <br>
+                    <input type="password" name="password" class="form-control" th:placeholder="#{form.password}">
+                    <br>
+
+                    <button class="btn btn-lg btn-primary btn-block" name="Submit"  type="Submit" th:text="#{form.button.login}"></button>
+                </form>
+                <br>
+                <form th:action="@{/passwordReset}" method="get">
+                    <button class="btn btn-primary" th:text="#{password.not.remember}" type="Submit"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

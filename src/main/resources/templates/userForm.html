@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="userForm">
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.email}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="email" th:field="*{email}" th:placeholder="#{form.email}" class="form-control"/>
+            </div>
+        </div>
+
+        <div th:if="${!passwordDisabled}" class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.password}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="validation-message"></label>
+                <input th:disabled="${passwordDisabled}" type="password" th:field="*{password}" th:placeholder="#{form.password}" class="form-control"/>
+            </div>
+        </div>
+
+        <div th:if="${!passwordDisabled}" class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.confirmPassword}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="validation-message"></label>
+                <input th:disabled="${passwordDisabled}" type="password" th:field="*{confirmPassword}" th:placeholder="#{form.confirmPassword}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.name}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="text" th:field="*{name}" th:placeholder="#{form.name}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.lastName}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="text" th:field="*{lastName}" th:placeholder="#{form.lastName}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.age}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="number" th:field="*{age}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.personalIdNumber}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('personalIdNumber')}" th:errors="*{personalIdNumber}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="text" th:field="*{personalIdNumber}" th:placeholder="#{form.personalIdNumber}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.street}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('street')}" th:errors="*{street}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="text" th:field="*{street}" th:placeholder="#{form.street}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.phoneNumber}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="text" th:field="*{phoneNumber}" th:placeholder="#{form.phoneNumber}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.zipCode}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="text" th:field="*{zipCode}" th:placeholder="#{form.zipCode}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-9">
+                <label th:text="#{form.country}"></label>
+                <label style="font-size: 20;color: #FF1C19;" th:if="${#fields.hasErrors('country')}" th:errors="*{country}" class="validation-message"></label>
+                <input th:disabled="${disabled}" type="text" th:field="*{country}" th:placeholder="#{form.country}" class="form-control"/>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="account" class="row">
+        <table th:if="${user}" class="table table-dark table-hover">
+            <thead>
+            <tr>
+                <th th:text="#{user.accountNumber}"></th>
+                <th th:text="#{form.email}"></th>
+                <th th:text="#{form.name}"></th>
+                <th th:text="#{form.lastName}"></th>
+                <th th:text="#{form.age}"></th>
+                <th th:text="#{form.personalIdNumber}"></th>
+            </tr>
+            </thead>
+            <tbody class="active">
+            <tr>
+                <td th:text="${user.accountNumber}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.age}"></td>
+                <td th:text="${user.personalIdNumber}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table th:if="${user}" class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th th:text="#{form.street}"></th>
+                    <th th:text="#{form.phoneNumber}"></th>
+                    <th th:text="#{form.zipCode}"></th>
+                    <th th:text="#{form.country}"></th>
+                    <th th:text="#{user.createdAccountTime}"></th>
+                </tr>
+            </thead>
+            <tbody class="active">
+                <tr>
+                    <td th:text="${user.street}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
+                    <td th:text="${user.zipCode}"></td>
+                    <td th:text="${user.country}"></td>
+                    <td th:text="${user.createdAccountTime}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+
+        <button th:if="${!passFragment}" th:text="#{security.button}" class="btn btn-primary" data-toggle="modal" data-target="#mySecurity"></button>
+
+        <div class="modal fade" id="mySecurity" role="dialog" style="opacity:1;">
+            <div class="modal-dialog modal-lg">
+                <form th:action="${'/home/' + user}" method="post" class="modal-content" style="position:fixed;color:black;">
+                    <div class="modal-header">
+                        <h4 th:text="#{change.password}" class="modal-title"></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button th:text="#{transfer.execute}" class="btn btn-primary"></button>
+                        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div th:if="${passFragment}" >
+            <form th:action="@{/home/changePasswordForm}" method="post">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <p th:text="#{form.new.password}"></p>
+                            <input type="password" name="newPassword" class="form-control" style="width:300px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <p th:text="#{form.confirm.new.password}"></p>
+                            <input type="password" name="confirmNewPassword" class="form-control" style="width:300px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <button th:text="#{transfer.execute}" class="btn btn-primary"></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

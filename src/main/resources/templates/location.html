@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="head :: head">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <form th:action="@{/home}" method="get">
+            <input type="submit" th:value="#{home.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/home/account}" method="get">
+            <input type="submit" th:value="#{account.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/transfer}" method="get">
+            <input type="submit" th:value="#{transfer.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/history}" method="get">
+            <input type="submit" th:value="#{history.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form sec:authorize="hasAuthority('EMPLOYEE')" th:action="@{/users}" method="get">
+            <input type="submit" th:value="#{employee.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/console}" method="get">
+            <input type="submit" th:value="#{console.page}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" th:value="#{logout}" class="btn btn-primary" style="font-size:18px;">
+        </form>
+    </nav>
+    <br><br>
+    <div class="container">
+        <p th:if="${message != null}" th:text="${message}" class="alert alert-success"></p>
+        <p th:if="${fatalError != null}" th:text="${fatalError}" class="alert alert-danger"></p>
+        <center>
+            <form id="ipForm" action="/console" method="post">
+                <input type="text" name="ipAddress" id="ip">
+                <input type="submit" name="submit" th:value="#{search.ip.submit}">
+            </form>
+
+            <div id="status"></div>
+
+            <div id="map" style="height:auto;width:auto;position:absolute;"></div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.817831068302!2d20.997813578085314!3d52.22852738972244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc92679d1b27%3A0xea7e3c73152c0fe8!2sGBC3.PL%20Pozycjonowanie%20lokalne%20w%20google%20maps%2C%20google%20search%20.!5e0!3m2!1spl!2spl!4v1588633203850!5m2!1spl!2spl" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        </center>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=59832&callback=initMap"></script>
+    <script th:src="@{/js/location.js}"></script>
+</body>
+</html>
