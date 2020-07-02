@@ -57,7 +57,7 @@ public class UserService
     public User findByUserId(Long id)
     {
         Optional<User> userOptional = userRepository.findById(id);
-        User user = new User();
+        User user = new User.UserBuilder().build();
 
         if(userOptional.isPresent())
         {
@@ -118,7 +118,7 @@ public class UserService
 
     public void updateUserFunds(BigDecimal funds, String personalIdNumber)
     {
-        User user = new User();
+        User user = new User.UserBuilder().build();
         user.setFunds(funds);
         user.setPersonalIdNumber(personalIdNumber);
         userRepository.updateUserFunds(funds, personalIdNumber);
@@ -166,44 +166,41 @@ public class UserService
 
     public User userDTOToUser(UserDTO userDTO)
     {
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setAccountNumber(userDTO.getAccountNumber());
-        user.setEmail(userDTO.getEmail());
-        user.setName(userDTO.getName());
-        user.setLastName(userDTO.getLastName());
-        user.setAge(userDTO.getAge());
-        user.setPersonalIdNumber(userDTO.getPersonalIdNumber());
-        user.setStreet(userDTO.getStreet());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setZipCode(userDTO.getZipCode());
-        user.setCountry(userDTO.getCountry());
-        user.setEnabled(userDTO.isEnabled());
-        user.setCreatedAccountTime(userDTO.getCreatedAccountTime());
-        user.setIp(userDTO.getIp());
-        user.setRoles(userDTO.getRoles());
-        return user;
+        return new User.UserBuilder()
+                .setId(userDTO.getId())
+                .setAccountNumber(userDTO.getAccountNumber())
+                .setEmail(userDTO.getEmail())
+                .setName(userDTO.getName())
+                .setLastName(userDTO.getLastName())
+                .setAge(userDTO.getAge())
+                .setPersonalIdNumber(userDTO.getPersonalIdNumber())
+                .setStreet(userDTO.getStreet())
+                .setPhoneNumber(userDTO.getPhoneNumber())
+                .setZipCode(userDTO.getZipCode())
+                .setCountry(userDTO.getCountry())
+                .setEnabled(userDTO.isEnabled())
+                .setCreatedAccountTime(userDTO.getCreatedAccountTime())
+                .setIp(userDTO.getIp())
+                .setRoles(userDTO.getRoles()).build();
     }
 
     public UserDTO userToUserDTO(User user)
     {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setAccountNumber(user.getAccountNumber());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setName(user.getName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setAge(user.getAge());
-        userDTO.setPersonalIdNumber(user.getPersonalIdNumber());
-        userDTO.setStreet(user.getStreet());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setZipCode(user.getZipCode());
-        userDTO.setCountry(user.getCountry());
-        userDTO.setEnabled(user.isEnabled());
-        userDTO.setCreatedAccountTime(user.getCreatedAccountTime());
-        userDTO.setIp(user.getIp());
-        userDTO.setRoles(user.getRoles());
-        return userDTO;
+        return new UserDTO.UserDTOBuilder().setId(user.getId())
+            .setAccountNumber(user.getAccountNumber())
+            .setEmail(user.getEmail())
+            .setName(user.getName())
+            .setLastName(user.getLastName())
+            .setAge(user.getAge())
+            .setPersonalIdNumber(user.getPersonalIdNumber())
+            .setStreet(user.getStreet())
+            .setPhoneNumber(user.getPhoneNumber())
+            .setZipCode(user.getZipCode())
+            .setCountry(user.getCountry())
+            .setEnabled(user.isEnabled())
+            .setCreatedAccountTime(user.getCreatedAccountTime())
+            .setIp(user.getIp())
+            .setRoles(user.getRoles()).build();
     }
 
     public String accountNumberForPage(String accountNumber)
