@@ -105,7 +105,7 @@ public class HomeController
         ModelAndView modelAndView = new ModelAndView();
         Locale locale = webRequest.getLocale();
         modelAndView.setViewName("redirect:/home/account?lang=" + locale.getLanguage());
-        User user = new User();
+        User user = new User.UserBuilder().build();
 
         loginController.changePasswordFormFunction(token, locale, modelAndView, user);
 

@@ -76,8 +76,8 @@ public class TransferController
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("date", actualDate.getTime());
-        modelAndView.addObject("transfer", new Transfer());
-        modelAndView.addObject("definedTransfer", new DefinedTransfer());
+        modelAndView.addObject("transfer", new Transfer.TransferBuilder().build());
+        modelAndView.addObject("definedTransfer", new DefinedTransfer.DefinedTransferBuilder().build());
         modelAndView.addObject("definedTransfers", definedTransfers);
         modelAndView.addObject("transferNumberForm", 0);
         modelAndView.addObject("template", "transfer");
@@ -261,7 +261,7 @@ public class TransferController
         modelAndView.addObject("transferForm", false);
         modelAndView.addObject("definedNewTransferForm", true);
         modelAndView.addObject("definedTransferForm", false);
-        modelAndView.addObject("definedTransfer", new DefinedTransfer());
+        modelAndView.addObject("definedTransfer", new DefinedTransfer.DefinedTransferBuilder().build());
         modelAndView.addObject("user", user);
         modelAndView.addObject("date", actualDate.getTime());
         modelAndView.addObject("template", "transfer");
