@@ -12,8 +12,6 @@ import javax.validation.constraints.Size;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "defined_transfer")
 public class DefinedTransfer
 {
@@ -34,6 +32,55 @@ public class DefinedTransfer
     @ValidOnlyNumbersAndString(message = "{illegal.characters}")
     @NotEmpty(message = "{transfer.error.subject}")
     private String recipientName;
+
+
+    public DefinedTransfer(Long id, Long userId, @Size(min = 24, max = 29, message = "{accountNumber.size}") String recipient, @NotEmpty(message = "{transfer.error.subject}") String subject, @NotEmpty(message = "{transfer.error.subject}") String recipientName) {
+        this.id = id;
+        this.userId = userId;
+        this.recipient = recipient;
+        this.subject = subject;
+        this.recipientName = recipientName;
+    }
+
+    public static class DefinedTransferBuilder
+    {
+        private Long id;
+        private Long userId;
+        private String recipient;
+        private String subject;
+        private String recipientName;
+
+        public DefinedTransferBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public DefinedTransferBuilder setUserId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public DefinedTransferBuilder setRecipient(String recipient) {
+            this.recipient = recipient;
+            return this;
+        }
+
+        public DefinedTransferBuilder setSubject(String subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        public DefinedTransferBuilder setRecipientName(String recipientName) {
+            this.recipientName = recipientName;
+            return this;
+        }
+
+
+        public DefinedTransfer build()
+        {
+            return new DefinedTransfer(id, userId, recipient, subject, recipientName);
+        }
+    }
 
 
     public Long getId() {

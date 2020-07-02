@@ -13,8 +13,6 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "transfer")
 public class Transfer
 {
@@ -53,6 +51,91 @@ public class Transfer
 
     @NotNull
     private boolean executed;
+
+    private Transfer(Long id, @Size(min = 24, max = 29, message = "{accountNumber.size}") String recipient, String senderRecipient, @DecimalMin(value = "6.00", message = "{transfer.small.amount}") @DecimalMax(value = "100000.00", message = "{transfer.too.large.amount}") @NotNull(message = "{transfer.small.amount}") BigDecimal amount, @DecimalMin(value = "0.00") BigDecimal senderBalance, @DecimalMin(value = "0.00") BigDecimal recipientBalance, String date, @NotEmpty(message = "{transfer.error.subject}") String subject, @NotEmpty(message = "{transfer.error.subject}") String recipientName, @NotNull boolean executed) {
+        this.id = id;
+        this.recipient = recipient;
+        this.senderRecipient = senderRecipient;
+        this.amount = amount;
+        this.senderBalance = senderBalance;
+        this.recipientBalance = recipientBalance;
+        this.date = date;
+        this.subject = subject;
+        this.recipientName = recipientName;
+        this.executed = executed;
+    }
+
+
+    public static class TransferBuilder
+    {
+        private Long id;
+        private String recipient;
+        private String senderRecipient;
+        private BigDecimal amount;
+        private BigDecimal senderBalance;
+        private BigDecimal recipientBalance;
+        private String date;
+        private String subject;
+        private String recipientName;
+        private boolean executed;
+
+
+        public TransferBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public TransferBuilder setRecipient(String recipient) {
+            this.recipient = recipient;
+            return this;
+        }
+
+        public TransferBuilder setSenderRecipient(String senderRecipient) {
+            this.senderRecipient = senderRecipient;
+            return this;
+        }
+
+        public TransferBuilder setAmount(BigDecimal amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public TransferBuilder setSenderBalance(BigDecimal senderBalance) {
+            this.senderBalance = senderBalance;
+            return this;
+        }
+
+        public TransferBuilder setRecipientBalance(BigDecimal recipientBalance) {
+            this.recipientBalance = recipientBalance;
+            return this;
+        }
+
+        public TransferBuilder setDate(String date) {
+            this.date = date;
+            return this;
+        }
+
+        public TransferBuilder setSubject(String subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        public TransferBuilder setRecipientName(String recipientName) {
+            this.recipientName = recipientName;
+            return this;
+        }
+
+        public TransferBuilder setExecuted(boolean executed) {
+            this.executed = executed;
+            return this;
+        }
+
+
+        public Transfer build()
+        {
+            return new Transfer(id, recipient, senderRecipient, amount, senderBalance, recipientBalance, date, subject, recipientName, executed);
+        }
+    }
 
 
     public Long getId() {
